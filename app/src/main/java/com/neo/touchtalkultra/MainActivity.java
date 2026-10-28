@@ -55,11 +55,145 @@ public class MainActivity extends Activity {
     private void buildNav(){nav=row();nav.setBackgroundColor(surface);pad(nav,7,7,7,7);String[] names={"Home","Talk","Device","Insights","Settings"};String[] icons={"⌂","◉","⌁","▥","⚙"};for(int i=0;i<names.length;i++){final String n=names[i];LinearLayout item=column();item.setGravity(Gravity.CENTER);TextView ic=label(icons[i],20,page.equals(n)?accent:muted,true);ic.setGravity(Gravity.CENTER);TextView tx=label(n,10,page.equals(n)?accent:muted,page.equals(n));tx.setGravity(Gravity.CENTER);item.addView(ic);item.addView(tx);item.setOnClickListener(v->showPage(n));nav.addView(item,new LinearLayout.LayoutParams(0,dp(52),1));}root.addView(nav); }
     private void heading(String s,String sub){add(body,label(s,19,text,true),28);if(sub!=null)add(body,label(sub,13,muted,false),34);}
     private void buildPage(){switch(page){case "Home":home();break;case "Talk":talk();break;case "Device":device();break;case "Insights":insights();break;default:settings();}}
-    private void home(){LinearLayout hero=column();pad(hero,20,22,20,20);hero.setBackground(new GradientDrawable(GradientDrawable.Orientation.TL_BR,new int[]{accent,0xFF8B72FF}));hero.setCornerRadius(dp(24));add(hero,label("YOUR VOICE. YOUR WAY.",11,0xFFE5E1FF,true),22);add(hero,label("Communication,\nwithout limits.",28,Color.WHITE,true),78);gap(hero,10);add(hero,label("Braille • speech • quick messages • your device",13,0xFFF0EDFF,false),24);body.addView(hero);gap(body,18);
-        LinearLayout stats=row();stat(stats,"DEVICE",connected()?"Connected":"Not connected",connected()?TEAL:ORANGE);stat(stats,"VOICE",autoSpeak?"Auto-read on":"Auto-read off",PURPLE);body.addView(stats);gap(body,18);
-        heading("Ready when you are","Pick up where you left off.");LinearLayout a=card();add(a,label("◉  Start communicating",17,text,true),28);add(a,label("Type, speak, or compose a Braille message.",13,muted,false),25);gap(a,10);add(a,button("Open communication studio  →",()->showPage("Talk"),true),48);body.addView(a);gap(body,12);
-        LinearLayout r=row();miniFeature(r,"⚡","Quick phrases","One-tap messages",()->{showPage("Talk");});miniFeature(r,"⌁","Connect device","Bluetooth setup",()->showPage("Device"));body.addView(r);gap(body,12);
-        LinearLayout c=card();add(c,label("A more personal experience",16,text,true),25);add(c,label("Make TouchTalk yours with themes, accent colours, reading speed, text size and privacy controls.",13,muted,false),52);add(c,button("Personalise app  →",()->showPage("Settings"),false),46);body.addView(c);}
+    private void home() {
+    LinearLayout hero = column();
+    pad(hero, 20, 22, 20, 20);
+
+    GradientDrawable heroBackground = new GradientDrawable(
+            GradientDrawable.Orientation.TL_BR,
+            new int[]{accent, 0xFF8B72FF}
+    );
+    heroBackground.setCornerRadius(dp(24));
+    hero.setBackground(heroBackground);
+
+    add(hero, label("YOUR VOICE. YOUR WAY.", 11, 0xFFE5E1FF, true), 22);
+    add(hero, label("Communication,\nwithout limits.", 28, Color.WHITE, true), 78);
+    gap(hero, 10);
+    add(hero, label(
+            "Braille • speech • quick messages • your device",
+            13,
+            0xFFF0EDFF,
+            false
+    ), 24);
+
+    body.addView(hero);
+    gap(body, 18);
+
+    // Connection and voice status
+    LinearLayout stats = row();
+
+    stat(
+            stats,
+            "DEVICE",
+            connected() ? "Connected" : "Not connected",
+            connected() ? TEAL : ORANGE
+    );
+
+    stat(
+            stats,
+            "VOICE",
+            autoSpeak ? "Auto-read on" : "Auto-read off",
+            PURPLE
+    );
+
+    body.addView(stats);
+    gap(body, 18);
+
+    // Main communication section
+    heading(
+            "Ready when you are",
+            "Pick up where you left off."
+    );
+
+    LinearLayout a = card();
+
+    add(
+            a,
+            label("◉  Start communicating", 17, text, true),
+            28
+    );
+
+    add(
+            a,
+            label(
+                    "Type, speak, or compose a Braille message.",
+                    13,
+                    muted,
+                    false
+            ),
+            25
+    );
+
+    gap(a, 10);
+
+    add(
+            a,
+            button(
+                    "Open communication studio  →",
+                    () -> showPage("Talk"),
+                    true
+            ),
+            48
+    );
+
+    body.addView(a);
+    gap(body, 12);
+
+    // Quick-access features
+    LinearLayout r = row();
+
+    miniFeature(
+            r,
+            "⚡",
+            "Quick phrases",
+            "One-tap messages",
+            () -> showPage("Talk")
+    );
+
+    miniFeature(
+            r,
+            "⌁",
+            "Connect device",
+            "Bluetooth setup",
+            () -> showPage("Device")
+    );
+
+    body.addView(r);
+    gap(body, 12);
+
+    // Personalisation section
+    LinearLayout c = card();
+
+    add(
+            c,
+            label("A more personal experience", 16, text, true),
+            25
+    );
+
+    add(
+            c,
+            label(
+                    "Make TouchTalk yours with themes, accent colours, "
+                            + "reading speed, text size and privacy controls.",
+                    13,
+                    muted,
+                    false
+            ),
+            52
+    );
+
+    add(
+            c,
+            button(
+                    "Personalise app  →",
+                    () -> showPage("Settings"),
+                    false
+            ),
+            46
+    );
+
+    body.addView(c);
+}
     private void stat(LinearLayout p,String over,String value,int col){LinearLayout c=card();add(c,label(over,10,muted,true),18);add(c,label(value,14,text,true),25);LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,-2,1);lp.setMargins(dp(4),0,dp(4),0);p.addView(c,lp);}
     private void miniFeature(LinearLayout p,String icon,String name,String desc,Runnable r){LinearLayout c=card();add(c,label(icon,22,accent,true),30);add(c,label(name,15,text,true),24);add(c,label(desc,12,muted,false),22);c.setOnClickListener(v->r.run());LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,-2,1);lp.setMargins(dp(4),0,dp(4),0);p.addView(c,lp);}
     private void talk(){heading("Communication studio","Choose the way that works for you.");LinearLayout modes=row();String[] mode={"⌨ Type","🎙 Speak","⠿ Braille"};for(String m:mode){TextView b=button(m,()->{if(m.contains("Type"))typePanel();else if(m.contains("Speak"))startSpeech();else braillePanel();},m.contains("Type"));LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(0,-2,1);lp.setMargins(dp(3),0,dp(3),0);modes.addView(b,lp);}body.addView(modes);gap(body,14);
